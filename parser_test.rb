@@ -151,6 +151,35 @@ describe Silo::Parser do
 
   end
 
+  context "argument" do
+
+    it "should consume any expression with or without a comma after it" do
+      parser.argument.should parse('1')
+      parser.argument.should parse('"hey", ')
+    end
+
+  end
+
+  context "arguments" do
+
+    it "should consume a comma-delimited list of arguments" do
+      parser.arguments.should parse("1")
+      parser.arguments.should parse('1, "hey kid, i\'m a computer"')
+    end
+
+  end
+
+  context "method_call" do
+
+    it "should consume a variable name with a set of arguments" do
+      parser.method_call.should parse("foo()")
+      parser.method_call.should parse("foo(bar)")
+      parser.method_call.should parse("foo(bar, baz)")
+      parser.method_call.should parse("foo(bar, baz, qux)")
+    end
+
+  end
+
   context "expression" do
 
     it "should consume literals" do
@@ -170,6 +199,13 @@ describe Silo::Parser do
       parser.expression.should parse('Yes')
       parser.expression.should parse('Yes._no')
       parser.expression.should parse('mAybe._')
+    end
+
+    it "should consume method calls" do
+      parser.expression.should parse("foo()")
+      parser.expression.should parse("foo(bar)")
+      parser.expression.should parse("foo(bar, baz)")
+      parser.expression.should parse("foo(bar, baz, qux)")
     end
 
   end

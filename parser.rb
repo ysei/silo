@@ -20,8 +20,14 @@ module Silo
     rule(:identifier) { match('[a-zA-Z_]') >> match('\w').repeat }
     rule(:variable) { identifier >> (str('.') >> identifier).maybe }
 
-    rule(:expression) { literal | variable }
+    rule(:argument) { expression >> str(", ").maybe }
+    rule(:arguments) { argument.repeat }
 
-    root(:expression)
+    rule(:method_call) { variable >> str('(') >> arguments.maybe >> str(')') }
+
+    rule(:expression) { literal | method_call | variable }
+
+    rule(:body) { expression.repeat }
+    root(:body)
   end
 end
