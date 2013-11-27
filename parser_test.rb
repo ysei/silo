@@ -156,6 +156,7 @@ describe Silo::Parser do
     it "should consume any expression with or without a comma after it" do
       parser.argument.should parse('1')
       parser.argument.should parse('"hey", ')
+      parser.argument.should parse('b,')
     end
 
   end
@@ -176,6 +177,7 @@ describe Silo::Parser do
       parser.method_call.should parse("foo(bar)")
       parser.method_call.should parse("foo(bar, baz)")
       parser.method_call.should parse("foo(bar, baz, qux)")
+      parser.method_call.should parse("foo(bar, baz,qux)")
     end
 
   end

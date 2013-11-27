@@ -3,6 +3,9 @@ require 'parslet'
 module Silo
   class Parser < Parslet::Parser
 
+    rule(:space) { match(' ') }
+    rule(:space?) { space.maybe }
+
     rule(:digit) { match('[0-9]') }
     rule(:integer) { digit.repeat(1) }
     rule(:float) { digit.repeat(1) >> str('.') >> digit.repeat(1) }
@@ -20,7 +23,8 @@ module Silo
     rule(:identifier) { match('[a-zA-Z_]') >> match('\w').repeat }
     rule(:variable) { identifier >> (str('.') >> identifier).maybe }
 
-    rule(:argument) { expression >> str(", ").maybe }
+    rule(:argument_delimiter) { str(",") >> space? }
+    rule(:argument) { expression >> argument_delimiter.maybe }
     rule(:arguments) { argument.repeat }
 
     rule(:method_call) { variable >> str('(') >> arguments.maybe >> str(')') }
