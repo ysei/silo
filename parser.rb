@@ -28,7 +28,8 @@ module Silo
 
     rule(:method_call) { variable >> str('(') >> arguments.maybe >> str(')') }
 
-    rule(:assignment) { variable >> space? >> str('=') >> space? >> expression }
+    rule(:assignment_operator) { space? >> str('=') >> space? }
+    rule(:assignment) { variable >> assignment_operator >> expression }
 
     rule(:expression) { literal | method_call | variable | assignment }
 
