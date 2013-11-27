@@ -42,12 +42,45 @@ describe Silo::Parser do
       parser.number.should parse('0')
       parser.number.should parse('123')
       parser.number.should parse('78128391')
+    end
 
     it "should consume floats" do
       parser.number.should parse('0.0')
       parser.number.should parse('123.45')
       parser.number.should parse('78128391.993')
     end
+
+  end
+
+  context "quote" do
+
+    it "should consume quotation marks" do
+      parser.quote.should parse('"')
+    end
+
+  end
+
+  context "string" do
+
+    it "should consume empty strings" do
+      parser.string.should parse('""')
+    end
+
+    it "should consume strings" do
+      parser.string.should parse('"Kill all the humans"')
+      parser.string.should parse('"No but seriously"')
+    end
+
+  end
+
+  context "literal" do
+
+    it "should consume numbers" do
+      parser.literal.should parse('781287391.9912')
+    end
+
+    it "should consume strings" do
+      parser.literal.should parse('"Kill all the humans"')
     end
 
   end

@@ -7,7 +7,13 @@ module Silo
     rule(:integer) { digit.repeat(1) }
     rule(:float) { digit.repeat(1) >> str('.') >> digit.repeat(1) }
     rule(:number) { integer | float }
-    root(:number)
+
+    rule(:quote) { str('"') }
+    rule(:string) { quote >> (quote.absent? >> any).repeat >> quote }
+
+    rule(:literal) { number | string }
+
+    root(:literal)
 
   end
 end
