@@ -73,14 +73,50 @@ describe Silo::Parser do
 
   end
 
+  context "other literals" do
+
+    context "truth" do
+
+      it "should consume true" do
+        parser.truth.should parse('true')
+      end
+
+    end
+
+    context "falsehood" do
+
+      it "should consume falsehood" do
+        parser.falsehood.should parse('false')
+      end
+
+    end
+
+    context "nope" do
+
+      it "should consume nope" do
+        parser.nope.should parse('nope')
+      end
+
+    end
+
+  end
+
   context "literal" do
 
     it "should consume numbers" do
       parser.literal.should parse('781287391.9912')
+      parser.literal.should parse('0')
     end
 
     it "should consume strings" do
       parser.literal.should parse('"Kill all the humans"')
+      parser.literal.should parse('""')
+    end
+
+    it "should consume the other literals" do
+      parser.literal.should parse('true')
+      parser.literal.should parse('false')
+      parser.literal.should parse('nope')
     end
 
   end

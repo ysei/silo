@@ -11,7 +11,11 @@ module Silo
     rule(:quote) { str('"') }
     rule(:string) { quote >> (quote.absent? >> any).repeat >> quote }
 
-    rule(:literal) { number | string }
+    rule(:truth) { str('true') }
+    rule(:falsehood) { str('false') }
+    rule(:nope) { str('nope') }
+
+    rule(:literal) { number | string | truth | falsehood | nope }
 
     root(:literal)
 
