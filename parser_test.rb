@@ -121,6 +121,59 @@ describe Silo::Parser do
 
   end
 
+  context "identifier" do
+
+    it "should consume valid identifier names" do
+      parser.identifier.should parse('b')
+      parser.identifier.should parse('banana')
+      parser.identifier.should parse('mango')
+      parser.identifier.should parse('_cherry')
+
+      parser.identifier.should_not parse('$cherry')
+      parser.identifier.should_not parse('_%')
+    end
+
+  end
+
+  context "variable" do
+
+    it "should consume identifiers" do
+      parser.variable.should parse('b')
+      parser.variable.should parse('_')
+      parser.variable.should_not parse('$b')
+    end
+
+    it "shoudl also consume properties of variables" do
+      parser.variable.should parse('b.banana')
+      parser.variable.should parse('_._')
+      parser.variable.should_not parse('b.$banana')
+    end
+
+  end
+
+  context "expression" do
+
+    it "should consume literals" do
+      parser.expression.should parse("81923.123")
+      parser.expression.should parse("1")
+      parser.expression.should parse('"If you cannot do great things, do small things in a great way."')
+      parser.expression.should parse('""')
+      parser.expression.should parse("true")
+      parser.expression.should parse("false")
+      parser.expression.should parse("nope")
+    end
+
+    it "should consume variables" do
+      parser.expression.should parse('_cherry')
+      parser.expression.should parse('b.banana')
+      parser.expression.should parse('_')
+      parser.expression.should parse('Yes')
+      parser.expression.should parse('Yes._no')
+      parser.expression.should parse('mAybe._')
+    end
+
+  end
+
 end
 
 RSpec::Core::Runner.run []

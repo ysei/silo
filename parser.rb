@@ -17,7 +17,11 @@ module Silo
 
     rule(:literal) { number | string | truth | falsehood | nope }
 
-    root(:literal)
+    rule(:identifier) { match('[a-zA-Z_]') >> match('\w').repeat }
+    rule(:variable) { identifier >> (str('.') >> identifier).maybe }
 
+    rule(:expression) { literal | variable }
+
+    root(:expression)
   end
 end
