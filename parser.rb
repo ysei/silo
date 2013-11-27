@@ -35,7 +35,9 @@ module Silo
     rule(:hash_assignment) { identifier >> hash_assignment_operator >> expression}
     rule(:hash) { str('{') >> (hash_assignment >> (argument_delimiter >> hash_assignment).repeat).maybe >> str('}') }
 
-    rule(:expression) { literal | method_call | variable | assignment | hash }
+    rule(:array) { str('[') >> arguments.maybe >> str(']') }
+
+    rule(:expression) { literal | method_call | variable | assignment | hash | array }
 
     rule(:body) { expression.repeat }
     root(:body)

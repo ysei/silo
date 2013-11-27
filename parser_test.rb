@@ -192,6 +192,16 @@ describe Silo::Parser do
 
   end
 
+  context "array" do
+
+    it "should consume arrays" do
+      parser.array.should parse('[]')
+      parser.array.should parse('[a, b, c]')
+      parser.array.should parse('["foo", bar, baz(), 2]')
+    end
+
+  end
+
   context "expression" do
 
     it "should consume literals" do
@@ -230,6 +240,12 @@ describe Silo::Parser do
       parser.expression.should parse("{}")
       parser.expression.should parse("{one: 1, two: 2, three: 3}")
       parser.expression.should parse("{one: 1, two: 2,three: 3}")
+    end
+
+    it "should consume arrays" do
+      parser.expression.should parse('[]')
+      parser.expression.should parse('[a, b, c]')
+      parser.expression.should parse('["foo", bar, baz(), 2]')
     end
 
   end
