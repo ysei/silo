@@ -182,6 +182,16 @@ describe Silo::Parser do
 
   end
 
+  context "hash" do
+
+    it "should consume hashes" do
+      parser.hash.should parse("{}")
+      parser.hash.should parse("{one: 1, two: 2, three: 3}")
+      parser.hash.should parse("{one: 1, two: 2,three: 3}")
+    end
+
+  end
+
   context "expression" do
 
     it "should consume literals" do
@@ -214,6 +224,12 @@ describe Silo::Parser do
       parser.expression.should parse("banana = 1")
       parser.expression.should parse("_ = \"get into my car\"")
       parser.expression.should parse("_.bestThing = false")
+    end
+
+    it "should consume hashes" do
+      parser.expression.should parse("{}")
+      parser.expression.should parse("{one: 1, two: 2, three: 3}")
+      parser.expression.should parse("{one: 1, two: 2,three: 3}")
     end
 
   end
