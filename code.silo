@@ -1,0 +1,29 @@
+# Comments are magic.
+
+square: |x| -> x * x
+
+sum: |x, y| -> x + y
+
+odd: |x| -> x % 2 is 0
+
+even: |x| -> x % 2 isnt 0
+
+hash: {one: 1, two: 2, three: 3}
+
+hashMultiline: {
+  pi: 3.14159
+  list: [1, 2, 3]
+  three: 3
+  innerHash: {
+    four: 4
+    spam: |x| -> puts x
+  }
+}
+
+runStuff: ->
+  foo('bar', |x| -> baz(x))
+
+if warp_drive.active?
+  engage
+else
+  away_missions
