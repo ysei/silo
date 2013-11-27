@@ -151,16 +151,6 @@ describe Silo::Parser do
 
   end
 
-  context "argument" do
-
-    it "should consume any expression with or without a comma after it" do
-      parser.argument.should parse('1')
-      parser.argument.should parse('"hey", ')
-      parser.argument.should parse('b,')
-    end
-
-  end
-
   context "arguments" do
 
     it "should consume a comma-delimited list of arguments" do

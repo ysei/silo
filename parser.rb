@@ -24,8 +24,7 @@ module Silo
     rule(:variable) { identifier >> (str('.') >> identifier).maybe }
 
     rule(:argument_delimiter) { str(",") >> space? }
-    rule(:argument) { expression >> argument_delimiter.maybe }
-    rule(:arguments) { argument.repeat }
+    rule(:arguments) { expression >> (argument_delimiter >> expression).repeat }
 
     rule(:method_call) { variable >> str('(') >> arguments.maybe >> str(')') }
 
