@@ -182,6 +182,16 @@ describe Silo::Parser do
 
   end
 
+  context "assignment" do
+
+    it "should consume a variable, an equals sign and an expression" do
+      parser.assignment.should parse("banana = 1")
+      parser.assignment.should parse("_ = \"get into my car\"")
+      parser.assignment.should parse("_.bestThing = false")
+    end
+
+  end
+
   context "expression" do
 
     it "should consume literals" do
@@ -208,6 +218,12 @@ describe Silo::Parser do
       parser.expression.should parse("foo(bar)")
       parser.expression.should parse("foo(bar, baz)")
       parser.expression.should parse("foo(bar, baz, qux)")
+    end
+
+    it "should consume assignments" do
+      parser.expression.should parse("banana = 1")
+      parser.expression.should parse("_ = \"get into my car\"")
+      parser.expression.should parse("_.bestThing = false")
     end
 
   end

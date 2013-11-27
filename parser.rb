@@ -29,7 +29,9 @@ module Silo
 
     rule(:method_call) { variable >> str('(') >> arguments.maybe >> str(')') }
 
-    rule(:expression) { literal | method_call | variable }
+    rule(:assignment) { variable >> space? >> str('=') >> space? >> expression }
+
+    rule(:expression) { literal | method_call | variable | assignment }
 
     rule(:body) { expression.repeat }
     root(:body)
