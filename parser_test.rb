@@ -219,6 +219,13 @@ describe Silo::Parser do
       parser.operation.should parse('banana.stand() < 2')
     end
 
+    it "should consume equality comparisons" do
+      parser.operation.should parse('3 isnt 1')
+      parser.operation.should parse('foo() is 3')
+      parser.operation.should parse('_ == bar')
+      parser.operation.should parse('banana.stand() != 2')
+    end
+
   end
 
   context "expression" do

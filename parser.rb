@@ -41,8 +41,10 @@ module Silo
 
     rule(:arithmetic_operator) { space? >> match('[-+*/%]') >> space? }
     rule(:comparison_operator) { space? >> match('[><]') >> str('=').maybe >> space? }
+    rule(:equality_operator) { str('isnt') | str('is') | str('==') | str('!=') }
+    rule(:operator) { arithmetic_operator | comparison_operator | equality_operator }
 
-    rule(:operation) { term >> (arithmetic_operator | comparison_operator) >> term }
+    rule(:operation) { term >> space? >> operator >> space? >> term }
 
     rule(:expression) { literal | method_call | variable | assignment | hash | array | operation }
 
