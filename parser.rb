@@ -38,15 +38,14 @@ module Silo
     rule(:arguments) { term >> (comma >> term).repeat }
     rule(:method_call) { variable >> lparen >> arguments.maybe >> rparen }
 
-    rule(:assignment) { variable >> space? >> equals >> space? >> term }
-
     rule(:hash_assignment) { identifier >> colon >> expression }
     rule(:hash) { lbrace >> (hash_assignment >> (comma >> hash_assignment).repeat).maybe >> rbrace }
 
     rule(:array) { lbracket >> arguments.maybe >> rbracket }
 
-    rule(:term) { literal | method_call | variable | assignment | hash | array }
+    rule(:term) { literal | method_call | variable | hash | array }
 
+    rule(:assignment_operator) { str('=') }
     rule(:arithmetic_operator) { match['-+*/%'] }
     rule(:comparison_operator) { match['><'] >> equals.maybe }
     rule(:equality_operator) { str('isnt') | str('is') | str('==') | str('!=') }
