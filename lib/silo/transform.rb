@@ -1,9 +1,11 @@
+require 'silo/nodes'
+
 module Silo
 
   class Transform < Parslet::Transform
     rule(:int => simple(:int))            { Integer(int) }
     rule(:float => simple(:float))        { Float(float) }
-    rule(:string => simple(:string))      { string }
+    rule(:string => simple(:string))      { string.to_s }
     rule(:true => simple(:true))          { true }
     rule(:false => simple(:false))        { false }
     rule(:nope => simple(:nope))          { nil }
@@ -21,7 +23,7 @@ module Silo
     rule(
       :left => simple(:left),
       :right => simple(:right),
-      :op => '=')                         { instance_variable_set("@#{left}", right) }
+      :op => '=')                         { Silo::Nodes::Assignment.exec(left, right) }
 
     # Comparison
     rule(
@@ -67,9 +69,9 @@ module Silo
 
     # Arithmetic
     rule(
-      :left => simple(:left),
-      :right => simple(:right),
-      :op => simple(:op))                 { left.send(op, right) }
+      :left => subtree(:left),
+      :right => subtree(:right),
+      :op => simple(:op))                   { Silo::Nodes::Arithmetic.exec(left, right, op) }
 
   end
 

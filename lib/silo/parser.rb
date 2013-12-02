@@ -44,16 +44,16 @@ module Silo
 
     rule(:term) { literal | method_call | variable | hash | array }
 
-    rule(:assignment_operator) { str('=') }
     rule(:arithmetic_operator) { match['-+*/%'] }
     rule(:comparison_operator) { match['><'] >> equals.maybe }
     rule(:equality_operator) { str('isnt') | str('is') | str('==') | str('!=') }
     rule(:compound_assignment_operator) { match['-+*/'] >> equals }
-    rule(:operator) { compound_assignment_operator | equality_operator | comparison_operator | assignment_operator | arithmetic_operator }
+    rule(:operator) { compound_assignment_operator | equality_operator | comparison_operator | arithmetic_operator }
 
     rule(:unary_operation) { (minus | bang) >> term }
     rule(:binary_operation) { term.as(:left) >> space? >> operator.as(:op) >> space? >> term.as(:right) }
-    rule(:operation) { unary_operation | binary_operation }
+    rule(:assignment) { variable.as(:left) >> space? >> equals.as(:op) >> space? >> term.as(:right) }
+    rule(:operation) { assignment | unary_operation | binary_operation }
 
     rule(:expression) { operation | term }
 
