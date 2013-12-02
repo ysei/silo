@@ -26,7 +26,7 @@ module Silo
     rule(:integer) { digit.repeat(1).as(:int) }
     rule(:float) { (digit.repeat(1) >> period >> digit.repeat(1)).as(:float) }
 
-    rule(:number) { integer | float }
+    rule(:number) { float | integer }
     rule(:string) { quote >> (quote.absent? >> any).repeat.as(:string) >> quote }
 
     rule(:literal) { number | string | truth | falsehood | nope }
@@ -50,7 +50,7 @@ module Silo
     rule(:comparison_operator) { match['><'] >> equals.maybe }
     rule(:equality_operator) { str('isnt') | str('is') | str('==') | str('!=') }
     rule(:compound_assignment_operator) { match['-+*/'] >> equals }
-    rule(:operator) { compound_assignment_operator | assignment_operator | arithmetic_operator | comparison_operator | equality_operator }
+    rule(:operator) { compound_assignment_operator | equality_operator | comparison_operator | assignment_operator | arithmetic_operator }
 
     rule(:unary_operation) { (minus | bang) >> term }
     rule(:binary_operation) { term.as(:left) >> space? >> operator.as(:op) >> space? >> term.as(:right) }
