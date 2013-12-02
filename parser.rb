@@ -29,7 +29,7 @@ module Silo
     rule(:method_call) { variable >> str('(') >> arguments.maybe >> str(')') }
 
     rule(:assignment_operator) { space? >> str('=') >> space? }
-    rule(:assignment) { variable >> assignment_operator >> expression }
+    rule(:assignment) { variable >> assignment_operator >> term }
 
     rule(:hash_assignment_operator) { str(':') >> space? }
     rule(:hash_assignment) { identifier >> hash_assignment_operator >> expression}
@@ -45,9 +45,11 @@ module Silo
     rule(:compound_assignment_operator) { match('[-+*/]') >> str('=') }
     rule(:operator) { compound_assignment_operator | arithmetic_operator | comparison_operator | equality_operator }
 
-    rule(:operation) { term >> space? >> operator >> space? >> term }
+    rule(:unary_operation) { match('[-!]') >> term }
+    rule(:binary_operation) { term >> space? >> operator >> space? >> term }
+    rule(:operation) { unary_operation | binary_operation }
 
-    rule(:expression) { literal | method_call | variable | assignment | hash | array | operation }
+    rule(:expression) { term | operation }
 
     rule(:body) { expression.repeat }
     root(:body)

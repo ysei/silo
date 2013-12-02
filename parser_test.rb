@@ -233,6 +233,11 @@ describe Silo::Parser do
       parser.operation.should parse('banana._stand /= 2')
     end
 
+    it "should consume unary operations" do
+      parser.operation.should parse('!foo')
+      parser.operation.should parse('-3')
+    end
+
   end
 
   context "expression" do
