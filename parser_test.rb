@@ -202,6 +202,18 @@ describe Silo::Parser do
 
   end
 
+  context "operation" do
+
+    it "should consume basic arithmetic" do
+      parser.operation.should parse('3 + 3')
+      parser.operation.should parse('foo() - 3')
+      parser.operation.should parse('_ * bar')
+      parser.operation.should parse('banana.stand() / 2')
+      parser.operation.should parse('4 % baz()')
+    end
+
+  end
+
   context "expression" do
 
     it "should consume literals" do

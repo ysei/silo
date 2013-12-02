@@ -37,7 +37,11 @@ module Silo
 
     rule(:array) { str('[') >> arguments.maybe >> str(']') }
 
-    rule(:expression) { literal | method_call | variable | assignment | hash | array }
+    rule(:term) { literal | method_call | variable | assignment | hash | array }
+
+    rule(:operation) { term >> space? >> match('[-+*/%]') >> space? >> term }
+
+    rule(:expression) { literal | method_call | variable | assignment | hash | array | operation }
 
     rule(:body) { expression.repeat }
     root(:body)
