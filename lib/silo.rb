@@ -8,8 +8,8 @@ module Silo
   ParseError = Class.new Error
   TransformError = Class.new Error
 
-  def self.load(str)
-    Transform.new.appy(Parser.new.parse(str))
+  def self.exec(str)
+    Transform.new.apply(Parser.new.expression.parse(str))
   rescue Parslet::ParseFailed => e
     deepest = deepest_cause e.cause
     line, column = deepest.source.line_and_column(deepest.pos)
