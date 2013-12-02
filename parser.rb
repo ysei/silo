@@ -38,7 +38,7 @@ module Silo
     rule(:arguments) { term >> (comma >> term).repeat }
     rule(:method_call) { variable.as(:method) >> lparen >> arguments.maybe.as(:args) >> rparen }
 
-    rule(:hash_assignment) { identifier >> colon >> term }
+    rule(:hash_assignment) { identifier.as(:key) >> colon >> term.as(:value) }
     rule(:hash) { lbrace >> (hash_assignment >> (comma >> hash_assignment).repeat).maybe >> rbrace }
 
     rule(:array) { lbracket >> arguments.repeat.as(:array) >> rbracket }
@@ -63,9 +63,7 @@ end
 
 def parse str
   silo = Silo::Parser.new
-  silo.expression.parse str
+  puts silo.hash.parse(str)
 rescue Parslet::ParseFailed => failure
   puts failure.cause.ascii_tree
 end
-
-parse 'b + 3'

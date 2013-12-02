@@ -16,6 +16,10 @@ describe Silo::Transformer do
       expect(parser.apply(float: '1.3')).to eq(1.3)
     end
 
+    it "should return a string" do
+      expect(parser.apply(string: 'foo')).to eq('foo')
+    end
+
     it "should return false" do
       expect(parser.apply(false: 'false')).to eq(false)
     end
@@ -26,6 +30,10 @@ describe Silo::Transformer do
 
     it "should return nope" do
       expect(parser.apply(nope: 'nope')).to eq(nil)
+    end
+
+    it "should return a hash" do
+      expect(parser.apply({key: "a key", value: "a value"})).to eq({"a key" => "a value"})
     end
 
   end
@@ -79,6 +87,21 @@ describe Silo::Transformer do
       expect(parser.apply(left: {int: '3'}, right: {int: '3'}, op: '<=')).to eq(true)
       expect(parser.apply(left: {int: '3'}, right: {int: '2'}, op: '>=')).to eq(true)
       expect(parser.apply(left: {int: '3'}, right: {int: '3'}, op: '>=')).to eq(true)
+    end
+
+  end
+
+  context "equality" do
+
+    it "should return the result of the comparison" do
+      expect(parser.apply(left: {string: 'hey'}, right: {string: 'hey'}, op: '==')).to eq(true)
+      expect(parser.apply(left: {string: 'foo'}, right: {string: 'bar'}, op: '==')).to eq(false)
+      expect(parser.apply(left: {string: 'hey'}, right: {string: 'hey'}, op: '!=')).to eq(false)
+      expect(parser.apply(left: {string: 'foo'}, right: {string: 'bar'}, op: '!=')).to eq(true)
+      expect(parser.apply(left: {string: 'hey'}, right: {string: 'hey'}, op: 'is')).to eq(true)
+      expect(parser.apply(left: {string: 'foo'}, right: {string: 'bar'}, op: 'is')).to eq(false)
+      expect(parser.apply(left: {string: 'hey'}, right: {string: 'hey'}, op: 'isnt')).to eq(false)
+      expect(parser.apply(left: {string: 'foo'}, right: {string: 'bar'}, op: 'isnt')).to eq(true)
     end
 
   end
