@@ -3,6 +3,7 @@ require 'silo/nodes'
 module Silo
 
   class Transform < Parslet::Transform
+    include Silo::Nodes
     rule(:int => simple(:int))            { Integer(int) }
     rule(:float => simple(:float))        { Float(float) }
     rule(:string => simple(:string))      { string.to_s }
@@ -23,55 +24,61 @@ module Silo
     rule(
       :left => simple(:left),
       :right => simple(:right),
-      :op => '=')                         { Silo::Nodes::Assignment.exec(left, right) }
+      :op => '=')                         { Assignment.exec(left, right) }
+
+    # Compound assignment
+    rule(
+      :left => simple(:left),
+      :right => simple(:right),
+      :op => '-=')                        { CompoundAssignment.exec(left, right, '-')}
 
     # Comparison
     rule(
       :left => simple(:left),
       :right => simple(:right),
-      :op => '>')                         { left > right }
+      :op => '>')                         { Comparison.exec(left, right, '>') }
 
     rule(
       :left => simple(:left),
       :right => simple(:right),
-      :op => '<')                         { left < right }
+      :op => '<')                         { Comparison.exec(left, right, '<') }
 
     rule(
       :left => simple(:left),
       :right => simple(:right),
-      :op => '>=')                         { left >= right }
+      :op => '>=')                         { Comparison.exec(left, right, '>=') }
 
     rule(
       :left => simple(:left),
       :right => simple(:right),
-      :op => '<=')                         { left <= right }
+      :op => '<=')                         { Comparison.exec(left, right, '<=') }
 
     # Equality
     rule(
       :left => simple(:left),
       :right => simple(:right),
-      :op => '==')                         { left == right }
+      :op => '==')                         { Comparison.exec(left, right, '==') }
 
     rule(
       :left => simple(:left),
       :right => simple(:right),
-      :op => '!=')                         { left != right }
+      :op => '!=')                         { Comparison.exec(left, right, '!=') }
 
     rule(
       :left => simple(:left),
       :right => simple(:right),
-      :op => 'is')                         { left == right }
+      :op => 'is')                         { Comparison.exec(left, right, 'is') }
 
     rule(
       :left => simple(:left),
       :right => simple(:right),
-      :op => 'isnt')                         { left != right }
+      :op => 'isnt')                       { Comparison.exec(left, right, 'isnt') }
 
     # Arithmetic
     rule(
       :left => subtree(:left),
       :right => subtree(:right),
-      :op => simple(:op))                   { Silo::Nodes::Arithmetic.exec(left, right, op) }
+      :op => simple(:op))                   { Arithmetic.exec(left, right, op) }
 
   end
 
