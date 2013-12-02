@@ -56,6 +56,10 @@ module Silo
     rule(:operation) { unary_operation | binary_operation }
 
     rule(:expression) { operation | term }
-    root :expression
+
+    rule(:terminator) { str("\n") | (str(";") >> space?) }
+    rule(:expressions) { expression >> (terminator >> expression).repeat }
+
+    root :expressions
   end
 end
