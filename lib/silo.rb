@@ -9,7 +9,7 @@ module Silo
   TransformError = Class.new Error
 
   def self.exec(str)
-    Transform.new.apply(Parser.new.expression.parse(str))
+    Transform.new.apply(Parser.new.expression.parse(str.chomp))
   rescue Parslet::ParseFailed => e
     deepest = deepest_cause e.cause
     line, column = deepest.source.line_and_column(deepest.pos)
