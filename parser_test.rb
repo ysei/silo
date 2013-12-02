@@ -212,6 +212,13 @@ describe Silo::Parser do
       parser.operation.should parse('4 % baz()')
     end
 
+    it "should consume comparisons" do
+      parser.operation.should parse('3 > 1')
+      parser.operation.should parse('foo() >= 3')
+      parser.operation.should parse('_ <= bar')
+      parser.operation.should parse('banana.stand() < 2')
+    end
+
   end
 
   context "expression" do

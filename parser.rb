@@ -39,7 +39,10 @@ module Silo
 
     rule(:term) { literal | method_call | variable | assignment | hash | array }
 
-    rule(:operation) { term >> space? >> match('[-+*/%]') >> space? >> term }
+    rule(:arithmetic_operator) { space? >> match('[-+*/%]') >> space? }
+    rule(:comparison_operator) { space? >> match('[><]') >> str('=').maybe >> space? }
+
+    rule(:operation) { term >> (arithmetic_operator | comparison_operator) >> term }
 
     rule(:expression) { literal | method_call | variable | assignment | hash | array | operation }
 
