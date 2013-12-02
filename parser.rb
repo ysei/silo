@@ -2,7 +2,7 @@ require 'parslet'
 
 module Silo
   class Parser < Parslet::Parser
-    rule(:space) { match('\s') }
+    rule(:space) { str(' ') }
     rule(:space?) { space.maybe }
     rule(:quote) { str('"') }
     rule(:comma) { str(",") >> space? }
@@ -21,7 +21,7 @@ module Silo
     rule(:truth) { str('true') }
     rule(:falsehood) { str('false') }
     rule(:nope) { str('nope') }
-    rule(:digit) { match('[0-9]') }
+    rule(:digit) { match['0-9'] }
 
     rule(:integer) { digit.repeat(1) }
     rule(:float) { digit.repeat(1) >> period >> digit.repeat(1) }
@@ -31,7 +31,7 @@ module Silo
 
     rule(:literal) { number | string | truth | falsehood | nope }
 
-    rule(:identifier) { match('[a-zA-Z_]') >> match('\w').repeat }
+    rule(:identifier) { match['a-zA-Z_'] >> match('\w').repeat }
 
     rule(:variable) { identifier >> (period >> identifier).maybe }
 
@@ -47,10 +47,10 @@ module Silo
 
     rule(:term) { literal | method_call | variable | assignment | hash | array }
 
-    rule(:arithmetic_operator) { match('[-+*/%]') }
-    rule(:comparison_operator) { match('[><]') >> equals.maybe }
+    rule(:arithmetic_operator) { match['-+*/%'] }
+    rule(:comparison_operator) { match['><'] >> equals.maybe }
     rule(:equality_operator) { str('isnt') | str('is') | str('==') | str('!=') }
-    rule(:compound_assignment_operator) { match('[-+*/]') >> equals }
+    rule(:compound_assignment_operator) { match['-+*/'] >> equals }
     rule(:operator) { compound_assignment_operator | arithmetic_operator | comparison_operator | equality_operator }
 
     rule(:unary_operation) { (minus | bang) >> term }
@@ -58,8 +58,6 @@ module Silo
     rule(:operation) { unary_operation | binary_operation }
 
     rule(:expression) { term | operation }
-
-    rule(:body) { expression.repeat }
-    root(:body)
+    root :expression
   end
 end
