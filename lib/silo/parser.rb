@@ -1,6 +1,5 @@
-require 'parslet'
-
 module Silo
+
   class Parser < Parslet::Parser
     rule(:space) { str(' ') }
     rule(:space?) { space.maybe }
@@ -59,11 +58,4 @@ module Silo
     rule(:expression) { operation | term }
     root :expression
   end
-end
-
-def parse str
-  silo = Silo::Parser.new
-  puts silo.hash.parse(str)
-rescue Parslet::ParseFailed => failure
-  puts failure.cause.ascii_tree
 end

@@ -1,8 +1,6 @@
-require_relative 'parser'
-require_relative 'transformer'
-require 'rspec'
+require "spec_helper"
 
-describe Silo::Transformer do
+describe Silo::Transform do
 
   let(:parser) { described_class.new }
 
@@ -107,5 +105,3 @@ describe Silo::Transformer do
   end
 
 end
-
-RSpec::Core::Runner.run []

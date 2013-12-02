@@ -1,6 +1,4 @@
-require_relative 'parser'
-require 'rspec'
-require 'parslet/rig/rspec'
+require "spec_helper"
 
 describe Silo::Parser do
 
@@ -285,5 +283,3 @@ describe Silo::Parser do
   end
 
 end
-
-RSpec::Core::Runner.run []

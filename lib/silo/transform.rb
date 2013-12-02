@@ -1,9 +1,6 @@
-require_relative './parser'
-require 'parslet'
-require 'pry'
-
 module Silo
-  class Transformer < Parslet::Transform
+
+  class Transform < Parslet::Transform
     rule(:int => simple(:int))            { Integer(int) }
     rule(:float => simple(:float))        { Float(float) }
     rule(:string => simple(:string))      { string }
@@ -73,8 +70,6 @@ module Silo
       :right => simple(:right),
       :op => simple(:op))                 { left.send(op, right) }
 
-    def noop
-      return "noop"
-    end
   end
+
 end
