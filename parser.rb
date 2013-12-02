@@ -18,16 +18,16 @@ module Silo
     rule(:minus) { str('-') }
     rule(:bang) { str('!') }
 
-    rule(:truth) { str('true') }
-    rule(:falsehood) { str('false') }
-    rule(:nope) { str('nope') }
+    rule(:truth) { str('true').as(:true) }
+    rule(:falsehood) { str('false').as(:false) }
+    rule(:nope) { str('nope').as(:nope) }
     rule(:digit) { match['0-9'] }
 
-    rule(:integer) { digit.repeat(1) }
-    rule(:float) { digit.repeat(1) >> period >> digit.repeat(1) }
+    rule(:integer) { digit.repeat(1).as(:int) }
+    rule(:float) { (digit.repeat(1) >> period >> digit.repeat(1)).as(:float) }
 
     rule(:number) { integer | float }
-    rule(:string) { quote >> (quote.absent? >> any).repeat >> quote }
+    rule(:string) { quote >> (quote.absent? >> any).repeat.as(:string) >> quote }
 
     rule(:literal) { number | string | truth | falsehood | nope }
 
@@ -36,12 +36,12 @@ module Silo
     rule(:variable) { identifier >> (period >> identifier).maybe }
 
     rule(:arguments) { term >> (comma >> term).repeat }
-    rule(:method_call) { variable >> lparen >> arguments.maybe >> rparen }
+    rule(:method_call) { variable.as(:method) >> lparen >> arguments.maybe.as(:args) >> rparen }
 
-    rule(:hash_assignment) { identifier >> colon >> expression }
+    rule(:hash_assignment) { identifier >> colon >> term }
     rule(:hash) { lbrace >> (hash_assignment >> (comma >> hash_assignment).repeat).maybe >> rbrace }
 
-    rule(:array) { lbracket >> arguments.maybe >> rbracket }
+    rule(:array) { lbracket >> arguments.repeat.as(:array) >> rbracket }
 
     rule(:term) { literal | method_call | variable | hash | array }
 
@@ -50,13 +50,22 @@ module Silo
     rule(:comparison_operator) { match['><'] >> equals.maybe }
     rule(:equality_operator) { str('isnt') | str('is') | str('==') | str('!=') }
     rule(:compound_assignment_operator) { match['-+*/'] >> equals }
-    rule(:operator) { compound_assignment_operator | arithmetic_operator | comparison_operator | equality_operator }
+    rule(:operator) { compound_assignment_operator | assignment_operator | arithmetic_operator | comparison_operator | equality_operator }
 
     rule(:unary_operation) { (minus | bang) >> term }
-    rule(:binary_operation) { term >> space? >> operator >> space? >> term }
+    rule(:binary_operation) { term.as(:left) >> space? >> operator.as(:op) >> space? >> term.as(:right) }
     rule(:operation) { unary_operation | binary_operation }
 
-    rule(:expression) { term | operation }
+    rule(:expression) { operation | term }
     root :expression
   end
 end
+
+def parse str
+  silo = Silo::Parser.new
+  silo.expression.parse str
+rescue Parslet::ParseFailed => failure
+  puts failure.cause.ascii_tree
+end
+
+parse 'b + 3'

@@ -172,16 +172,6 @@ describe Silo::Parser do
 
   end
 
-  context "assignment" do
-
-    it "should consume a variable, an equals sign and an expression" do
-      parser.assignment.should parse("banana = 1")
-      parser.assignment.should parse("_ = \"get into my car\"")
-      parser.assignment.should parse("_.bestThing = false")
-    end
-
-  end
-
   context "hash" do
 
     it "should consume hashes" do
@@ -236,6 +226,12 @@ describe Silo::Parser do
     it "should consume unary operations" do
       parser.operation.should parse('!foo')
       parser.operation.should parse('-3')
+    end
+
+    it "should consume a variable, an equals sign and an expression" do
+      parser.operation.should parse("banana = 1")
+      parser.operation.should parse("_ = \"get into my car\"")
+      parser.operation.should parse("_.bestThing = false")
     end
 
   end
