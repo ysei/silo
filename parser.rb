@@ -42,7 +42,8 @@ module Silo
     rule(:arithmetic_operator) { space? >> match('[-+*/%]') >> space? }
     rule(:comparison_operator) { space? >> match('[><]') >> str('=').maybe >> space? }
     rule(:equality_operator) { str('isnt') | str('is') | str('==') | str('!=') }
-    rule(:operator) { arithmetic_operator | comparison_operator | equality_operator }
+    rule(:compound_assignment_operator) { match('[-+*/]') >> str('=') }
+    rule(:operator) { compound_assignment_operator | arithmetic_operator | comparison_operator | equality_operator }
 
     rule(:operation) { term >> space? >> operator >> space? >> term }
 

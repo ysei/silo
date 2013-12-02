@@ -226,6 +226,13 @@ describe Silo::Parser do
       parser.operation.should parse('banana.stand() != 2')
     end
 
+    it "should consume compound assignments" do
+      parser.operation.should parse('foo += 1')
+      parser.operation.should parse('bar.baz -= 3')
+      parser.operation.should parse('_ *= bar')
+      parser.operation.should parse('banana._stand /= 2')
+    end
+
   end
 
   context "expression" do
