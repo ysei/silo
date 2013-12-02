@@ -9,6 +9,7 @@ module Silo
     rule(:nope => simple(:nope))          { nil }
 
     # Arrays
+    rule(:array => simple(:a))            { [] }
     rule(:array => subtree(:a))           { a }
 
     # Hashes

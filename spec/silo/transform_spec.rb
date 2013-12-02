@@ -30,6 +30,29 @@ describe Silo::Transform do
       expect(parser.apply(nope: 'nope')).to eq(nil)
     end
 
+  end
+
+  context "arrays" do
+
+    it "should transform an empty array" do
+      expect(parser.apply(array: '[]')).to eq([])
+    end
+
+    it "should transform an array" do
+      expect(parser.apply(array: [{int: '1'}, {string: 'a'}])).to eq([1, 'a'])
+    end
+
+    it "should transform a nested array" do
+      expect(parser.apply(array: [
+        { array: [ {int: '1'}, {string: 'a'} ] },
+        { array: [ {string: 'foo'}, {float: '1.2'} ] },
+      ]))
+    end
+
+  end
+
+  context "hashes" do
+
     it "should return a hash" do
       expect(parser.apply({key: "a key", value: "a value"})).to eq({"a key" => "a value"})
     end

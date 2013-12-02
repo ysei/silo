@@ -40,7 +40,7 @@ module Silo
     rule(:hash_assignment) { identifier.as(:key) >> colon >> term.as(:value) }
     rule(:hash) { lbrace >> (hash_assignment >> (comma >> hash_assignment).repeat).maybe >> rbrace }
 
-    rule(:array) { lbracket >> arguments.repeat.as(:array) >> rbracket }
+    rule(:array) { (lbracket >> arguments.repeat >> rbracket).as(:array) }
 
     rule(:term) { literal | method_call | variable | hash | array }
 
